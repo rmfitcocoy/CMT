@@ -1,0 +1,94 @@
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\Newtonsoft.Json.dll
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Net.Http.Formatting.dll
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Web.Http.dll
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Web.Http.WebHost.dll
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\Newtonsoft.Json.xml
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Net.Http.Formatting.xml
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Web.Http.xml
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Web.Http.WebHost.xml
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\JBCSoftwares_CM.dll.config
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\JBCSoftwares_CM.dll
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\JBCSoftwares_CM.pdb
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\obj\Debug\JBCSoftwares_CM.dll
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\obj\Debug\JBCSoftwares_CM.pdb
+D:\Personal Files\Softwares\JBC-Softwares - CM\AccountingSystem_CM\bin\JBCSoftwares_CM.dll.config
+D:\Personal Files\Softwares\JBC-Softwares - CM\AccountingSystem_CM\bin\JBCSoftwares_CM.dll
+D:\Personal Files\Softwares\JBC-Softwares - CM\AccountingSystem_CM\bin\JBCSoftwares_CM.pdb
+D:\Personal Files\Softwares\JBC-Softwares - CM\AccountingSystem_CM\bin\Newtonsoft.Json.dll
+D:\Personal Files\Softwares\JBC-Softwares - CM\AccountingSystem_CM\bin\System.Net.Http.Formatting.dll
+D:\Personal Files\Softwares\JBC-Softwares - CM\AccountingSystem_CM\bin\System.Web.Http.dll
+D:\Personal Files\Softwares\JBC-Softwares - CM\AccountingSystem_CM\bin\System.Web.Http.WebHost.dll
+D:\Personal Files\Softwares\JBC-Softwares - CM\AccountingSystem_CM\bin\Newtonsoft.Json.xml
+D:\Personal Files\Softwares\JBC-Softwares - CM\AccountingSystem_CM\bin\System.Net.Http.Formatting.xml
+D:\Personal Files\Softwares\JBC-Softwares - CM\AccountingSystem_CM\bin\System.Web.Http.xml
+D:\Personal Files\Softwares\JBC-Softwares - CM\AccountingSystem_CM\bin\System.Web.Http.WebHost.xml
+D:\Personal Files\Softwares\JBC-Softwares - CM\AccountingSystem_CM\obj\Debug\JBCSoftwares_CM.csprojResolveAssemblyReference.cache
+D:\Personal Files\Softwares\JBC-Softwares - CM\AccountingSystem_CM\obj\Debug\JBCSoftwares_CM.dll
+D:\Personal Files\Softwares\JBC-Softwares - CM\AccountingSystem_CM\obj\Debug\JBCSoftwares_CM.pdb
+D:\Personal Files\Softwares\JBC Softwares - CM\AccountingSystem_CM\bin\JBCSoftwares_CM.dll.config
+D:\Personal Files\Softwares\JBC Softwares - CM\AccountingSystem_CM\bin\JBCSoftwares_CM.dll
+D:\Personal Files\Softwares\JBC Softwares - CM\AccountingSystem_CM\bin\JBCSoftwares_CM.pdb
+D:\Personal Files\Softwares\JBC Softwares - CM\AccountingSystem_CM\bin\Newtonsoft.Json.dll
+D:\Personal Files\Softwares\JBC Softwares - CM\AccountingSystem_CM\bin\System.Net.Http.Formatting.dll
+D:\Personal Files\Softwares\JBC Softwares - CM\AccountingSystem_CM\bin\System.Web.Http.dll
+D:\Personal Files\Softwares\JBC Softwares - CM\AccountingSystem_CM\bin\System.Web.Http.WebHost.dll
+D:\Personal Files\Softwares\JBC Softwares - CM\AccountingSystem_CM\bin\Newtonsoft.Json.xml
+D:\Personal Files\Softwares\JBC Softwares - CM\AccountingSystem_CM\bin\System.Net.Http.Formatting.xml
+D:\Personal Files\Softwares\JBC Softwares - CM\AccountingSystem_CM\bin\System.Web.Http.xml
+D:\Personal Files\Softwares\JBC Softwares - CM\AccountingSystem_CM\bin\System.Web.Http.WebHost.xml
+D:\Personal Files\Softwares\JBC Softwares - CM\AccountingSystem_CM\obj\Debug\JBCSoftwares_CM.csprojResolveAssemblyReference.cache
+D:\Personal Files\Softwares\JBC Softwares - CM\AccountingSystem_CM\obj\Debug\JBCSoftwares_CM.dll
+D:\Personal Files\Softwares\JBC Softwares - CM\AccountingSystem_CM\obj\Debug\JBCSoftwares_CM.pdb
+D:\Personal Files\Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\JBCSoftwares_CM.dll.config
+D:\Personal Files\Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\JBCSoftwares_CM.dll
+D:\Personal Files\Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\JBCSoftwares_CM.pdb
+D:\Personal Files\Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\Newtonsoft.Json.dll
+D:\Personal Files\Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Net.Http.Formatting.dll
+D:\Personal Files\Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Web.Http.dll
+D:\Personal Files\Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Web.Http.WebHost.dll
+D:\Personal Files\Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\Newtonsoft.Json.xml
+D:\Personal Files\Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Net.Http.Formatting.xml
+D:\Personal Files\Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Web.Http.xml
+D:\Personal Files\Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Web.Http.WebHost.xml
+D:\Personal Files\Softwares\JBC Softwares - CM\JBCSoftwares_CM\obj\Debug\JBCSoftwares_CM.dll
+D:\Personal Files\Softwares\JBC Softwares - CM\JBCSoftwares_CM\obj\Debug\JBCSoftwares_CM.pdb
+D:\PERSONAL FILES\Softwares\JBC Softwares -FINAL\JBC Softwares - CM\JBCSoftwares_CM\bin\JBCSoftwares_CM.dll.config
+D:\PERSONAL FILES\Softwares\JBC Softwares -FINAL\JBC Softwares - CM\JBCSoftwares_CM\bin\JBCSoftwares_CM.dll
+D:\PERSONAL FILES\Softwares\JBC Softwares -FINAL\JBC Softwares - CM\JBCSoftwares_CM\bin\JBCSoftwares_CM.pdb
+D:\PERSONAL FILES\Softwares\JBC Softwares -FINAL\JBC Softwares - CM\JBCSoftwares_CM\bin\Newtonsoft.Json.dll
+D:\PERSONAL FILES\Softwares\JBC Softwares -FINAL\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Net.Http.Formatting.dll
+D:\PERSONAL FILES\Softwares\JBC Softwares -FINAL\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Web.Http.dll
+D:\PERSONAL FILES\Softwares\JBC Softwares -FINAL\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Web.Http.WebHost.dll
+D:\PERSONAL FILES\Softwares\JBC Softwares -FINAL\JBC Softwares - CM\JBCSoftwares_CM\bin\Newtonsoft.Json.xml
+D:\PERSONAL FILES\Softwares\JBC Softwares -FINAL\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Net.Http.Formatting.xml
+D:\PERSONAL FILES\Softwares\JBC Softwares -FINAL\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Web.Http.xml
+D:\PERSONAL FILES\Softwares\JBC Softwares -FINAL\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Web.Http.WebHost.xml
+D:\PERSONAL FILES\Softwares\JBC Softwares -FINAL\JBC Softwares - CM\JBCSoftwares_CM\obj\Debug\JBCSoftwares_CM.dll
+D:\PERSONAL FILES\Softwares\JBC Softwares -FINAL\JBC Softwares - CM\JBCSoftwares_CM\obj\Debug\JBCSoftwares_CM.pdb
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC ERP Softwares - Euroblade\JBC Softwares - CM\JBCSoftwares_CM\bin\JBCSoftwares_CM.dll.config
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC ERP Softwares - Euroblade\JBC Softwares - CM\JBCSoftwares_CM\bin\JBCSoftwares_CM.dll
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC ERP Softwares - Euroblade\JBC Softwares - CM\JBCSoftwares_CM\bin\JBCSoftwares_CM.pdb
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC ERP Softwares - Euroblade\JBC Softwares - CM\JBCSoftwares_CM\bin\Newtonsoft.Json.dll
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC ERP Softwares - Euroblade\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Net.Http.Formatting.dll
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC ERP Softwares - Euroblade\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Web.Http.dll
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC ERP Softwares - Euroblade\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Web.Http.WebHost.dll
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC ERP Softwares - Euroblade\JBC Softwares - CM\JBCSoftwares_CM\bin\Newtonsoft.Json.xml
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC ERP Softwares - Euroblade\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Net.Http.Formatting.xml
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC ERP Softwares - Euroblade\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Web.Http.xml
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC ERP Softwares - Euroblade\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Web.Http.WebHost.xml
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC ERP Softwares - Euroblade\JBC Softwares - CM\JBCSoftwares_CM\obj\Debug\JBCSoftwares_CM.dll
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC ERP Softwares - Euroblade\JBC Softwares - CM\JBCSoftwares_CM\obj\Debug\JBCSoftwares_CM.pdb
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\JBCSoftwares_CM.dll.config
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\JBCSoftwares_CM.dll
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\JBCSoftwares_CM.pdb
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\Newtonsoft.Json.dll
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Net.Http.Formatting.dll
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Web.Http.dll
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Web.Http.WebHost.dll
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\Newtonsoft.Json.xml
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Net.Http.Formatting.xml
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Web.Http.xml
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC Softwares\JBC Softwares - CM\JBCSoftwares_CM\bin\System.Web.Http.WebHost.xml
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC Softwares\JBC Softwares - CM\JBCSoftwares_CM\obj\Debug\JBCSoftwares_CM.dll
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC Softwares\JBC Softwares - CM\JBCSoftwares_CM\obj\Debug\JBCSoftwares_CM.pdb
+D:\PERSONAL FILES\Softwares- JBC Active\JBC SOFTWARES\JBC Softwares\JBC Softwares - CM\JBCSoftwares_CM\obj\Debug\JBCSoftwares_CM.csprojResolveAssemblyReference.cache

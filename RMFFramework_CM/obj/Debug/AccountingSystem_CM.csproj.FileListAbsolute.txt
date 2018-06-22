@@ -1,0 +1,26 @@
+C:\Users\jplarisan\OneDrive - rafi.local\PROJECT\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\InvestmentManagementSystem_CM.dll.config
+C:\Users\jplarisan\OneDrive - rafi.local\PROJECT\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\InvestmentManagementSystem_CM.dll
+C:\Users\jplarisan\OneDrive - rafi.local\PROJECT\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\InvestmentManagementSystem_CM.pdb
+C:\Users\jplarisan\OneDrive - rafi.local\PROJECT\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\Newtonsoft.Json.dll
+C:\Users\jplarisan\OneDrive - rafi.local\PROJECT\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Net.Http.Formatting.dll
+C:\Users\jplarisan\OneDrive - rafi.local\PROJECT\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Web.Http.dll
+C:\Users\jplarisan\OneDrive - rafi.local\PROJECT\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Web.Http.WebHost.dll
+C:\Users\jplarisan\OneDrive - rafi.local\PROJECT\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\Newtonsoft.Json.xml
+C:\Users\jplarisan\OneDrive - rafi.local\PROJECT\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Net.Http.Formatting.xml
+C:\Users\jplarisan\OneDrive - rafi.local\PROJECT\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Web.Http.xml
+C:\Users\jplarisan\OneDrive - rafi.local\PROJECT\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Web.Http.WebHost.xml
+C:\Users\jplarisan\OneDrive - rafi.local\PROJECT\AFO-AccountingSystem - CM\AccountingSystem_CM\obj\Debug\InvestmentManagementSystem_CM.dll
+C:\Users\jplarisan\OneDrive - rafi.local\PROJECT\AFO-AccountingSystem - CM\AccountingSystem_CM\obj\Debug\InvestmentManagementSystem_CM.pdb
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\InvestmentManagementSystem_CM.dll.config
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\InvestmentManagementSystem_CM.dll
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\InvestmentManagementSystem_CM.pdb
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\Newtonsoft.Json.dll
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Net.Http.Formatting.dll
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Web.Http.dll
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Web.Http.WebHost.dll
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\Newtonsoft.Json.xml
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Net.Http.Formatting.xml
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Web.Http.xml
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\bin\System.Web.Http.WebHost.xml
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\obj\Debug\InvestmentManagementSystem_CM.dll
+D:\Personal Files\Softwares\AFO-AccountingSystem - CM\AccountingSystem_CM\obj\Debug\InvestmentManagementSystem_CM.pdb

@@ -1,0 +1,89 @@
+D:\Work\API\API Template\RMFFramework_CM\bin\RMFFramework_CM.dll.config
+D:\Work\API\API Template\RMFFramework_CM\bin\RMFFramework_CM.dll
+D:\Work\API\API Template\RMFFramework_CM\bin\RMFFramework_CM.pdb
+D:\Work\API\API Template\RMFFramework_CM\bin\Newtonsoft.Json.dll
+D:\Work\API\API Template\RMFFramework_CM\bin\System.Net.Http.Formatting.dll
+D:\Work\API\API Template\RMFFramework_CM\bin\System.Web.Http.dll
+D:\Work\API\API Template\RMFFramework_CM\bin\System.Web.Http.WebHost.dll
+D:\Work\API\API Template\RMFFramework_CM\bin\Newtonsoft.Json.xml
+D:\Work\API\API Template\RMFFramework_CM\bin\System.Net.Http.Formatting.xml
+D:\Work\API\API Template\RMFFramework_CM\bin\System.Web.Http.xml
+D:\Work\API\API Template\RMFFramework_CM\bin\System.Web.Http.WebHost.xml
+D:\Work\API\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.csprojResolveAssemblyReference.cache
+D:\Work\API\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.csproj.CoreCompileInputs.cache
+D:\Work\API\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.csproj.CopyComplete
+D:\Work\API\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.dll
+D:\Work\API\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.pdb
+C:\Users\lcanceran\Desktop\Projects\RMF\API Template\RMFFramework_CM\bin\RMFFramework_CM.dll.config
+C:\Users\lcanceran\Desktop\Projects\RMF\API Template\RMFFramework_CM\bin\RMFFramework_CM.dll
+C:\Users\lcanceran\Desktop\Projects\RMF\API Template\RMFFramework_CM\bin\RMFFramework_CM.pdb
+C:\Users\lcanceran\Desktop\Projects\RMF\API Template\RMFFramework_CM\bin\Newtonsoft.Json.dll
+C:\Users\lcanceran\Desktop\Projects\RMF\API Template\RMFFramework_CM\bin\System.Net.Http.Formatting.dll
+C:\Users\lcanceran\Desktop\Projects\RMF\API Template\RMFFramework_CM\bin\System.Web.Http.dll
+C:\Users\lcanceran\Desktop\Projects\RMF\API Template\RMFFramework_CM\bin\System.Web.Http.WebHost.dll
+C:\Users\lcanceran\Desktop\Projects\RMF\API Template\RMFFramework_CM\bin\Newtonsoft.Json.xml
+C:\Users\lcanceran\Desktop\Projects\RMF\API Template\RMFFramework_CM\bin\System.Net.Http.Formatting.xml
+C:\Users\lcanceran\Desktop\Projects\RMF\API Template\RMFFramework_CM\bin\System.Web.Http.xml
+C:\Users\lcanceran\Desktop\Projects\RMF\API Template\RMFFramework_CM\bin\System.Web.Http.WebHost.xml
+C:\Users\lcanceran\Desktop\Projects\RMF\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.dll
+C:\Users\lcanceran\Desktop\Projects\RMF\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.pdb
+C:\Users\lcanceran\Desktop\Projects\RMF\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.csprojResolveAssemblyReference.cache
+D:\Work\API\GJ\API Template\RMFFramework_CM\bin\RMFFramework_CM.dll.config
+D:\Work\API\GJ\API Template\RMFFramework_CM\bin\RMFFramework_CM.dll
+D:\Work\API\GJ\API Template\RMFFramework_CM\bin\RMFFramework_CM.pdb
+D:\Work\API\GJ\API Template\RMFFramework_CM\bin\Newtonsoft.Json.dll
+D:\Work\API\GJ\API Template\RMFFramework_CM\bin\System.Net.Http.Formatting.dll
+D:\Work\API\GJ\API Template\RMFFramework_CM\bin\System.Web.Http.dll
+D:\Work\API\GJ\API Template\RMFFramework_CM\bin\System.Web.Http.WebHost.dll
+D:\Work\API\GJ\API Template\RMFFramework_CM\bin\Newtonsoft.Json.xml
+D:\Work\API\GJ\API Template\RMFFramework_CM\bin\System.Net.Http.Formatting.xml
+D:\Work\API\GJ\API Template\RMFFramework_CM\bin\System.Web.Http.xml
+D:\Work\API\GJ\API Template\RMFFramework_CM\bin\System.Web.Http.WebHost.xml
+D:\Work\API\GJ\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.csproj.CoreCompileInputs.cache
+D:\Work\API\GJ\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.csproj.CopyComplete
+D:\Work\API\GJ\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.dll
+D:\Work\API\GJ\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.pdb
+D:\Work\API\GJ\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.csprojResolveAssemblyReference.cache
+D:\Work\API\RMF Framework_Version_2\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.csprojResolveAssemblyReference.cache
+D:\Work\API\RMF Framework_Version_2\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.csproj.CoreCompileInputs.cache
+D:\Work\API\RMF Framework_Version_2\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.dll
+D:\Work\API\RMF Framework_Version_2\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.pdb
+D:\Work\API\RMF Framework_Version_2\API Template\RMFFramework_CM\bin\RMFFramework_CM.dll.config
+D:\Work\API\RMF Framework_Version_2\API Template\RMFFramework_CM\bin\RMFFramework_CM.dll
+D:\Work\API\RMF Framework_Version_2\API Template\RMFFramework_CM\bin\RMFFramework_CM.pdb
+D:\Work\API\RMF Framework_Version_2\API Template\RMFFramework_CM\bin\Newtonsoft.Json.dll
+D:\Work\API\RMF Framework_Version_2\API Template\RMFFramework_CM\bin\System.Net.Http.Formatting.dll
+D:\Work\API\RMF Framework_Version_2\API Template\RMFFramework_CM\bin\System.Web.Http.dll
+D:\Work\API\RMF Framework_Version_2\API Template\RMFFramework_CM\bin\System.Web.Http.WebHost.dll
+D:\Work\API\RMF Framework_Version_2\API Template\RMFFramework_CM\bin\Newtonsoft.Json.xml
+D:\Work\API\RMF Framework_Version_2\API Template\RMFFramework_CM\bin\System.Net.Http.Formatting.xml
+D:\Work\API\RMF Framework_Version_2\API Template\RMFFramework_CM\bin\System.Web.Http.xml
+D:\Work\API\RMF Framework_Version_2\API Template\RMFFramework_CM\bin\System.Web.Http.WebHost.xml
+D:\Work\API\RMF Framework_Version_2\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.csproj.CopyComplete
+C:\Users\lcanceran\Desktop\Projects\API Template\RMFFramework_CM\bin\RMFFramework_CM.dll.config
+C:\Users\lcanceran\Desktop\Projects\API Template\RMFFramework_CM\bin\RMFFramework_CM.dll
+C:\Users\lcanceran\Desktop\Projects\API Template\RMFFramework_CM\bin\RMFFramework_CM.pdb
+C:\Users\lcanceran\Desktop\Projects\API Template\RMFFramework_CM\bin\Newtonsoft.Json.dll
+C:\Users\lcanceran\Desktop\Projects\API Template\RMFFramework_CM\bin\System.Net.Http.Formatting.dll
+C:\Users\lcanceran\Desktop\Projects\API Template\RMFFramework_CM\bin\System.Web.Http.dll
+C:\Users\lcanceran\Desktop\Projects\API Template\RMFFramework_CM\bin\System.Web.Http.WebHost.dll
+C:\Users\lcanceran\Desktop\Projects\API Template\RMFFramework_CM\bin\Newtonsoft.Json.xml
+C:\Users\lcanceran\Desktop\Projects\API Template\RMFFramework_CM\bin\System.Net.Http.Formatting.xml
+C:\Users\lcanceran\Desktop\Projects\API Template\RMFFramework_CM\bin\System.Web.Http.xml
+C:\Users\lcanceran\Desktop\Projects\API Template\RMFFramework_CM\bin\System.Web.Http.WebHost.xml
+C:\Users\lcanceran\Desktop\Projects\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.dll
+C:\Users\lcanceran\Desktop\Projects\API Template\RMFFramework_CM\obj\Debug\RMFFramework_CM.pdb
+C:\Users\lcanceran\Desktop\Projects\CMT\RMFFramework_CM\bin\RMFFramework_CM.dll.config
+C:\Users\lcanceran\Desktop\Projects\CMT\RMFFramework_CM\bin\RMFFramework_CM.dll
+C:\Users\lcanceran\Desktop\Projects\CMT\RMFFramework_CM\bin\RMFFramework_CM.pdb
+C:\Users\lcanceran\Desktop\Projects\CMT\RMFFramework_CM\bin\Newtonsoft.Json.dll
+C:\Users\lcanceran\Desktop\Projects\CMT\RMFFramework_CM\bin\System.Net.Http.Formatting.dll
+C:\Users\lcanceran\Desktop\Projects\CMT\RMFFramework_CM\bin\System.Web.Http.dll
+C:\Users\lcanceran\Desktop\Projects\CMT\RMFFramework_CM\bin\System.Web.Http.WebHost.dll
+C:\Users\lcanceran\Desktop\Projects\CMT\RMFFramework_CM\bin\Newtonsoft.Json.xml
+C:\Users\lcanceran\Desktop\Projects\CMT\RMFFramework_CM\bin\System.Net.Http.Formatting.xml
+C:\Users\lcanceran\Desktop\Projects\CMT\RMFFramework_CM\bin\System.Web.Http.xml
+C:\Users\lcanceran\Desktop\Projects\CMT\RMFFramework_CM\bin\System.Web.Http.WebHost.xml
+C:\Users\lcanceran\Desktop\Projects\CMT\RMFFramework_CM\obj\Debug\RMFFramework_CM.dll
+C:\Users\lcanceran\Desktop\Projects\CMT\RMFFramework_CM\obj\Debug\RMFFramework_CM.pdb
+C:\Users\lcanceran\Desktop\Projects\CMT\RMFFramework_CM\obj\Debug\RMFFramework_CM.csprojResolveAssemblyReference.cache
