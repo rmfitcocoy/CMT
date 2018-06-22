@@ -1,0 +1,1164 @@
+https://gallery.technet.microsoft.com/scriptcenter/Create-Audit-Table-and-5cd69d5d
+https://weblogs.asp.net/jongalloway/adding-simple-trigger-based-auditing-to-your-sql-server-database
+
+USE [RPDScale]
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[usp_build_audit_trail]    Script Date: 5/2/2017 8:37:42 PM ******/
+
+/* Here is a chunk of code I wrote back in 2007 for quickly adding an audit trail to a database.  Try it out on a small DB as see what you think.*/
+
+/* Phil_Burney@msn.com */
+
+SET ANSI_NULLS ON
+
+GO
+
+SET QUOTED_IDENTIFIER ON
+
+GO
+
+-- =============================================
+
+-- Author: Phil Burney
+
+-- Create date: May 4, 2007
+
+-- Description: Build Audit Trail and associated triggers
+
+-- =============================================
+
+/*
+
+--------------------------------------------------------------------------------------------
+
+  ***  Change USE RPDSCALE2 to proper database name before use
+
+ 
+
+Step 1 Build Audit tables for each table
+
+add columns for DateModified, ModifiedBy, HostName, ApplicationName, Operation
+
+ 
+
+Step 2 Build triggers for each table
+
+UPDATE
+
+INSERT
+
+DELETE
+
+Modify  - updates actual table with username, 
+
+ 
+
+Step 3 Add columns to each table for audit data, 
+
+ 
+
+Created
+
+LastChanged
+
+RowVersion
+
+LastChangedBy
+
+--------------------------------------------------------------------------------------------
+
+*/
+
+ALTER PROCEDURE [dbo].[usp_build_audit_trail]
+
+AS
+
+BEGIN
+
+ 
+
+-- SET NOCOUNT ON added to prevent extra result sets from
+
+-- interfering with SELECT statements.
+
+SET NOCOUNT ON;
+
+ 
+
+    -- Insert statements for procedure here
+
+PRINT '*** Make sure you used the correct database! ***'
+
+print Char(13) + Char(10)
+
+print Char(13) + Char(10)
+
+DECLARE 
+
+   @TableName VARCHAR(50), 
+
+   @SchemaName VARCHAR(50), 
+
+   @SQL NVARCHAR(max)
+
+-- for each table
+
+-- 1
+
+DECLARE cTables CURSOR FAST_FORWARD READ_ONLY
+
+  FOR
+
+  SELECT t.name 
+
+FROM sys.tables t
+
+WHERE left(t.name,6) <> 'audit_' --AND (t.name = 'c_test' OR t.name = 'tbl_comm')
+
+ 
+
+--2 
+
+OPEN cTables
+
+--3 
+
+FETCH cTables INTO  @TableName   -- prime the cursor
+
+WHILE @@Fetch_Status = 0 
+
+  BEGIN
+
+ 
+
+/*
+
+--Step 1 Build Audit tables for each table
+
+--Delete table if it exists
+
+Build SQL statement to create table column by column using SELECT output
+
+concatenated to other strings, then executed
+
+ 
+
+*/
+
+print ' --  ***********  BEGIN BUILD AUDIT TABLE SECTION ************ '
+
+ 
+
+--Delete table if it already exists, then rebuild it --NOTE: This will delete existing audit trail
+
+IF EXISTS (SELECT * FROM
+
+sys.tables T
+
+WHERE T.name ='Audit_' + @TableName)
+
+BEGIN
+
+SET @SQL = 'DROP TABLE Audit_' + @TableName
+
+print ' --  *** DROP Existing Audit Table ***'
+
+PRINT @SQL
+
+print Char(13) + Char(10)
+
+EXEC (@SQL)
+
+END
+
+ 
+
+-- *** BEGIN BUILD AUDIT TABLE - For currently fetched table name ***
+
+ 
+
+SET @SQL = 'CREATE TABLE Audit_' + @TableName + '('
+
++ 'Audit_record_id BIGINT NOT NULL IDENTITY(1,1) PRIMARY KEY CLUSTERED, ' + Char(13) + Char(10) 
+
++ 'DateModified DATETIME NULL, ' + Char(13) + Char(10) 
+
++ 'ModifiedBy NVARCHAR(128) NULL, ' + Char(13) + Char(10) 
+
++ 'HostName NVARCHAR(128) NULL, ' + Char(13) + Char(10) 
+
++ 'ApplicationName NVARCHAR(128) NULL, ' + Char(13) + Char(10) 
+
++ 'Operation NVARCHAR(2) NULL, ' + Char(13) + Char(10) 
+
++ 'RowVersion INT NULL ' + Char(13) + Char(10) 
+
+--Build column definitions, row by row from system table
+
+SELECT @SQL = @SQL +
+
+ 
+
++ ',' --leading comma so we dont have to take it off at the end
+
++ '['  + c.name + '] [' + ty.name + '] ' + ++++++  --multiple ++ are legal
+
+ 
+
+CASE
+
+WHEN ty.name = 'nvarchar'  THEN '(' + CAST(c.max_length/2 as nvarchar(10)) + ')'
+
+ELSE ''
+
+END  -- nvarchar vs varchar
+
+ 
+
+ + ' NULL ' + Char(13) + Char(10) 
+
+ 
+
+FROM sys.tables AS t
+
+JOIN sys.columns AS c   --could be INNER JOIN
+
+ON t.[object_id] = c.[object_id]  --use braces to distinguish between keyword object_id
+
+JOIN sys.types AS ty
+
+ON c.system_type_id = ty.user_type_id   --ty.user_type_id because 2 rows for system_type_id
+
+WHERE
+
+t.name = @TableName AND c.name <> 'ts'  AND c.name <> 'LastModified' AND c.name <> 'LastModifiedBy'
+
+AND c.name <> 'RowVersion' and c.name <> 'Created' --dont use timestamp datatype in audit table
+
+ 
+
+ 
+
+ 
+
+SELECT @SQL = @SQL + ') '
+
+ 
+
+ 
+
+print ' -- *** Create Table Statement ***' 
+
+print @sql  --rem this out if you want, displays the sql that builds the audit tables
+
+exec (@SQL)
+
+print Char(13) + Char(10) 
+
+print Char(13) + Char(10) 
+
+ 
+
+-- *** END BUILD AUDIT TABLE ***
+
+ 
+
+/*
+
+   ***  BEGIN ADD AUDIT DATA COLUMNS TO AUDITED TABLES  ***
+
+ 
+
+*** Step 2 Add columns to each table for audit data, IF they dont already exist ***
+
+Created
+
+LastChanged
+
+RowVersion
+
+LastChangedBy
+
+*/
+
+ 
+
+print ' --  ***********  BEGIN ADD COLUMNS TO AUDITED TABLE SECTION ************ '
+
+print ' -- *** IF they exist in table already, this section will be blank. ***'
+
+ 
+
+-- Add created column
+
+IF NOT EXISTS (SELECT * FROM
+
+sys.tables T
+
+INNER JOIN sys.columns C
+
+ON t.object_id = c.object_id
+
+WHERE T.name = @TableName AND  c.name = 'Created')
+
+ 
+
+BEGIN
+
+SET @SQL = 'ALTER TABLE ' + @TableName + ' ADD Created DateTime NOT NULL DEFAULT(GetDate())'
+
+EXEC (@SQL)
+
+PRINT @SQL
+
+END
+
+ 
+
+ 
+
+ 
+
+-- Add LastChanged column
+
+IF NOT EXISTS (SELECT * FROM
+
+sys.tables T
+
+INNER JOIN sys.columns C
+
+ON t.object_id = c.object_id
+
+WHERE T.name = @TableName AND  c.name = 'LastModified')
+
+ 
+
+BEGIN
+
+   SET @SQL = 'ALTER TABLE ' + @TableName + ' ADD LastModified DateTime NOT NULL DEFAULT(GetDate())'
+
+EXEC (@SQL)
+
+PRINT @SQL
+
+END
+
+ 
+
+-- Add RowVersion column
+
+IF NOT EXISTS (SELECT * FROM
+
+sys.tables T
+
+INNER JOIN sys.columns C
+
+ON t.object_id = c.object_id
+
+WHERE T.name = @TableName AND  c.name = 'RowVersion')
+
+ 
+
+BEGIN
+
+SET @SQL = 'ALTER TABLE ' + @TableName + ' ADD RowVersion INT NOT NULL DEFAULT(1)'
+
+EXEC (@SQL)
+
+PRINT @SQL
+
+END
+
+ 
+
+ 
+
+ 
+
+-- Add LastChangedBy column
+
+IF NOT EXISTS (SELECT * FROM
+
+sys.tables T
+
+INNER JOIN sys.columns C
+
+ON t.object_id = c.object_id
+
+WHERE T.name = @TableName AND  c.name = 'LastModifiedBy')
+
+ 
+
+BEGIN   
+
+SET @SQL = 'ALTER TABLE '  + @TableName + ' ADD LastModifiedBy NVARCHAR(70) NOT NULL DEFAULT(system_user)'
+
+EXEC (@SQL)
+
+PRINT @SQL
+
+   END
+
+ 
+
+ 
+
+-- Add TS column, FOR CONCURRENCY TESTING
+
+IF NOT EXISTS (SELECT * FROM
+
+sys.tables T
+
+INNER JOIN sys.columns C
+
+ON t.object_id = c.object_id
+
+WHERE T.name = @TableName AND  c.name = 'ts')
+
+ 
+
+BEGIN   
+
+PRINT '--  *  Added for testing concurrency *' 
+
+SET @SQL = 'ALTER TABLE '  + @TableName + ' ADD ts TIMESTAMP NOT NULL '
+
+EXEC (@SQL)
+
+PRINT @SQL
+
+   END
+
+ 
+
+ 
+
+print Char(13) + Char(10) 
+
+ 
+
+print ' -- ***  END of  Add Columns to audited table Section  ***'
+
+print Char(13) + Char(10) 
+
+ 
+
+ 
+
+print ' --  ***********  BEGIN BUILD TRIGGERS SECTION ************ '
+
+print Char(13) + Char(10)
+
+--  ***  BEGIN BUILD TRIGGERS SECTION ***
+
+ 
+
+-- *** BEGIN UPDATE TRIGGER ***
+
+ 
+
+IF EXISTS (SELECT * FROM
+
+sys.triggers T
+
+WHERE T.name ='Audit_UPDATE_' + @TableName)
+
+BEGIN
+
+SET @SQL = 'DROP TRIGGER Audit_UPDATE_' + @TableName
+
+print ' --  *** DROP Existing UPDATE Trigger ***'
+
+PRINT @SQL
+
+EXEC (@SQL)
+
+END
+
+ 
+
+print Char(13) + Char(10) 
+
+print ' --  *** Build UPDATE Trigger ***'
+
+ 
+
+SET @SQL = 'CREATE TRIGGER    Audit_UPDATE_' + @TableName + ' ON '
+
++ @TableName + Char(13) + Char(10) 
+
++ ' AFTER UPDATE ' + Char(13) + Char(10) 
+
++ ' NOT FOR REPLICATION '   + Char(13) + Char(10) 
+
++ ' AS ' + Char(13) + Char(10) 
+
+    + ' SET NOCOUNT ON ' + Char(13) + Char(10) 
+
++ 'If Trigger_NestLevel() > 1 Return; ' + Char(13) + Char(10) 
+
+     
+
+-- get one datetime stamp to use in both inserted and deleted row in audit table
+
+    + ' DECLARE @AuditTime DATETIME ' + Char(13) + Char(10) 
+
++ ' SET @AuditTime = GetDate() '  + Char(13) + Char(10) 
+
+ 
+
++ 'INSERT INTO Audit_' + @TableName + '(' 
+
+ 
+
+ 
+
+ 
+
+SELECT @SQL = @SQL +
+
++ c.name + ',' 
+
+ 
+
+FROM sys.tables AS t
+
+JOIN sys.columns AS c   --could be INNER JOIN
+
+ON t.[object_id] = c.[object_id]  --use braces to distinguish between keyword object_id
+
+WHERE
+
+t.name = @TableName  AND c.name <> 'ts'  AND c.name <> 'LastModified' AND c.name <> 'LastModifiedBy'
+
+AND c.name <> 'RowVersion' and c.name <> 'Created'
+
+--NOTE:  RowVersion data is added explicitly below, this could be different
+
+--       but I wanted to add ALL audit related data explicitly.
+
+ 
+
+ 
+
+SET @SQL = @SQL + 'DateModified,ModifiedBy,HostName,ApplicationName,Operation,RowVersion)'  --Closing paren
+
+ 
+
+ 
+
+ 
+
+SET @SQL = @SQL + 
+
++ ' SELECT ' 
+
+ 
+
+SELECT @SQL = @SQL +
+
++ c.name + ','
+
+ 
+
+FROM sys.tables AS t
+
+JOIN sys.columns AS c   --could be INNER JOIN
+
+ON t.[object_id] = c.[object_id]  --use braces to distinguish between keyword object_id
+
+WHERE
+
+t.name = @TableName AND c.name <> 'ts'  AND c.name <> 'LastModified' AND c.name <> 'LastModifiedBy'
+
+AND c.name <> 'RowVersion' and c.name <> 'Created'
+
+ 
+
+ 
+
+SET @SQL = @SQL + '@AuditTime,suser_sname(),Host_Name(),APP_NAME(),''UD'',RowVersion'
+
+ 
+
+ + ' FROM DELETED  '  + Char(13) + Char(10) 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+--  Inserted portion of UPDATE
+
+ 
+
++ '  INSERT      INTO Audit_' + @TableName + '(' 
+
+ 
+
+SELECT @SQL = @SQL +
+
++ c.name + ',' 
+
+ 
+
+FROM sys.tables AS t
+
+JOIN sys.columns AS c   --could be INNER JOIN
+
+ON t.[object_id] = c.[object_id]  --use braces to distinguish between keyword object_id
+
+WHERE
+
+t.name = @TableName AND c.name <> 'ts'  AND c.name <> 'LastModified' AND c.name <> 'LastModifiedBy'
+
+AND c.name <> 'RowVersion' and c.name <> 'Created' --always name timestamp columns ts
+
+ 
+
+ 
+
+SET @SQL = @SQL + 'DateModified,ModifiedBy,HostName,ApplicationName,Operation,RowVersion)'  --Closing paren
+
+ 
+
+ 
+
+ 
+
+SET @SQL = @SQL + 
+
++ ' SELECT ' 
+
+ 
+
+SELECT @SQL = @SQL +
+
++ c.name + ','
+
+ 
+
+FROM sys.tables AS t
+
+JOIN sys.columns AS c   --could be INNER JOIN
+
+ON t.[object_id] = c.[object_id]  --use braces to distinguish between keyword object_id
+
+WHERE
+
+t.name = @TableName AND c.name <> 'ts'  AND c.name <> 'LastModified' AND c.name <> 'LastModifiedBy'
+
+AND c.name <> 'RowVersion' and c.name <> 'Created'
+
+ 
+
+ 
+
+SET @SQL = @SQL + '@AuditTime,suser_sname(),Host_Name(),APP_NAME(),''UI'',RowVersion+1'
+
+ 
+
+ + ' FROM INSERTED  '
+
+ 
+
+print @sql  --rem this out if you want, displays the sql that builds the audit tables
+
+exec (@SQL)   
+
+ 
+
+print Char(13) + Char(10) 
+
+print Char(13) + Char(10) 
+
+-- *******   END UPDATE  TRIGGER *******
+
+ 
+
+ 
+
+ 
+
+-- *** BEGIN INSERT TRIGGER ***
+
+ 
+
+IF EXISTS (SELECT * FROM
+
+sys.triggers T
+
+WHERE T.name ='Audit_INSERT_' + @TableName)
+
+BEGIN
+
+SET @SQL = 'DROP TRIGGER Audit_INSERT_' + @TableName
+
+print ' --  *** DROP Existing INSERT Trigger ***'
+
+PRINT @SQL
+
+EXEC (@SQL)
+
+END
+
+ 
+
+print Char(13) + Char(10) 
+
+print ' --  *** Build INSERT Trigger ***'
+
+ 
+
+ 
+
+SET @SQL = 'CREATE TRIGGER    Audit_INSERT_' + @TableName + ' ON '
+
++ @TableName + Char(13) + Char(10) 
+
++ ' AFTER INSERT ' + Char(13) + Char(10) 
+
++ ' NOT FOR REPLICATION AS ' + Char(13) + Char(10) 
+
+    + ' SET NOCOUNT ON ' + Char(13) + Char(10) 
+
+-- get one datetime stamp to use in both inserted and deleted row in audit table
+
+    + ' DECLARE @AuditTime DATETIME ' + Char(13) + Char(10) 
+
++ ' SET @AuditTime = GetDate() '  + Char(13) + Char(10) 
+
+ 
+
++ 'INSERT INTO Audit_' + @TableName + '(' 
+
+ 
+
+ 
+
+--start of building columns clause
+
+SELECT @SQL = @SQL +
+
++ c.name + ',' 
+
+ 
+
+FROM sys.tables AS t
+
+JOIN sys.columns AS c   --could be INNER JOIN
+
+ON t.[object_id] = c.[object_id]  --use braces to distinguish between keyword object_id
+
+WHERE
+
+t.name = @TableName AND c.name <> 'ts'  AND c.name <> 'LastModified' AND c.name <> 'LastModifiedBy'
+
+AND c.name <> 'RowVersion' and c.name <> 'Created'
+
+ 
+
+ 
+
+SET @SQL = @SQL + 'DateModified,ModifiedBy,HostName,ApplicationName,Operation,RowVersion)'  --Closing paren
+
+ 
+
+-- start of building values clause
+
+ 
+
+SET @SQL = @SQL + 
+
++ ' SELECT ' 
+
+ 
+
+SELECT @SQL = @SQL +
+
++ c.name + ','
+
+ 
+
+FROM sys.tables AS t
+
+JOIN sys.columns AS c   --could be INNER JOIN
+
+ON t.[object_id] = c.[object_id]  --use braces to distinguish between keyword object_id
+
+WHERE
+
+t.name = @TableName AND c.name <> 'ts'  AND c.name <> 'LastModified' AND c.name <> 'LastModifiedBy'
+
+AND c.name <> 'RowVersion' and c.name <> 'Created'
+
+ 
+
+ 
+
+SET @SQL = @SQL + '@AuditTime,suser_sname(),Host_Name(),APP_NAME(),''I'',RowVersion'
+
+ 
+
+ + ' FROM INSERTED  '  + Char(13) + Char(10) 
+
+ 
+
+ 
+
+ 
+
+print @sql  --rem this out if you want, displays the sql that builds the audit tables
+
+exec (@SQL)   
+
+print Char(13) + Char(10) 
+
+print Char(13) + Char(10) 
+
+ 
+
+ 
+
+ 
+
+-- *** BEGIN DELETE TRIGGER ***
+
+IF EXISTS (SELECT * FROM
+
+sys.triggers T
+
+WHERE T.name ='Audit_DELETE_' + @TableName)
+
+BEGIN
+
+SET @SQL = 'DROP TRIGGER Audit_DELETE_' + @TableName
+
+print ' --  *** DROP Existing DELETE Trigger ***'
+
+PRINT @SQL
+
+EXEC (@SQL)
+
+END
+
+ 
+
+print Char(13) + Char(10) 
+
+print ' -- *** Build DELETE Trigger ***'
+
+ 
+
+SET @SQL = 'CREATE TRIGGER    Audit_DELETE_' + @TableName + ' ON '
+
++ @TableName + Char(13) + Char(10) 
+
++ ' AFTER DELETE ' + Char(13) + Char(10) 
+
++ ' NOT FOR REPLICATION AS ' + Char(13) + Char(10) 
+
+    + ' SET NOCOUNT ON ' + Char(13) + Char(10) 
+
+-- get one datetime stamp to use in both inserted and deleted row in audit table
+
+    + ' DECLARE @AuditTime DATETIME ' + Char(13) + Char(10) 
+
++ ' SET @AuditTime = GetDate() '  + Char(13) + Char(10) 
+
+ 
+
++ 'INSERT INTO Audit_' + @TableName + '(' 
+
+ 
+
+ 
+
+--start of building columns clause
+
+SELECT @SQL = @SQL +
+
++ c.name + ',' 
+
+ 
+
+FROM sys.tables AS t
+
+JOIN sys.columns AS c   --could be INNER JOIN
+
+ON t.[object_id] = c.[object_id]  --use braces to distinguish between keyword object_id
+
+WHERE
+
+t.name = @TableName  AND c.name <> 'ts'   AND c.name <> 'LastModified' AND c.name <> 'LastModifiedBy'
+
+AND c.name <> 'RowVersion' and c.name <> 'Created'
+
+ 
+
+ 
+
+SET @SQL = @SQL + 'DateModified,ModifiedBy,HostName,ApplicationName,Operation,RowVersion)'  --Closing paren
+
+ 
+
+ 
+
+ 
+
+SET @SQL = @SQL + 
+
++ ' SELECT ' 
+
+-- start of building values clause
+
+ 
+
+SELECT @SQL = @SQL +
+
++ c.name + ','
+
+ 
+
+FROM sys.tables AS t
+
+JOIN sys.columns AS c   --could be INNER JOIN
+
+ON t.[object_id] = c.[object_id]  --use braces to distinguish between keyword object_id
+
+WHERE
+
+t.name = @TableName  AND c.name <> 'ts'   AND c.name <> 'LastModified' AND c.name <> 'LastModifiedBy'
+
+AND c.name <> 'RowVersion' and c.name <> 'Created'
+
+ 
+
+ 
+
+SET @SQL = @SQL + '@AuditTime,suser_sname(),Host_Name(),APP_NAME(),''D'',RowVersion'
+
+ 
+
+ + ' FROM DELETED  '  + Char(13) + Char(10) 
+
+ 
+
+print @sql  --rem this out if you want, displays the sql that builds the audit tables
+
+exec (@SQL)   
+
+print Char(13) + Char(10) 
+
+print Char(13) + Char(10) 
+
+print Char(13) + Char(10)
+
+ 
+
+ 
+
+ 
+
+-- *** BEGIN MODIFIED TRIGGER ***
+
+ 
+
+IF EXISTS (SELECT * FROM
+
+sys.triggers T
+
+WHERE T.name ='Audit_MODIFIED_' + @TableName)
+
+BEGIN
+
+SET @SQL = 'DROP TRIGGER Audit_MODIFIED_' + @TableName
+
+print ' --  *** DROP Existing MODIFIED Trigger ***'
+
+PRINT @SQL
+
+EXEC (@SQL)
+
+END
+
+ 
+
+print Char(13) + Char(10)
+
+print ' -- ***Build Modified Trigger ***'
+
+ 
+
+SET @SQL = 'CREATE TRIGGER    Audit_MODIFIED_' + @TableName + ' ON '
+
++ @TableName + Char(13) + Char(10) 
+
++ ' AFTER UPDATE ' + Char(13) + Char(10) 
+
++ ' NOT FOR REPLICATION AS ' + Char(13) + Char(10) 
+
+    + ' SET NOCOUNT ON ' + Char(13) + Char(10) 
+
+-- get one datetime stamp to use in both inserted and deleted row in audit table
+
+    + ' DECLARE @AuditTime DATETIME ' + Char(13) + Char(10) 
+
++ ' SET @AuditTime = GetDate() '  + Char(13) + Char(10) 
+
+ 
+
++ 'BEGIN TRY ' +  Char(13) + Char(10) 
+
++ '  ' +  Char(13) + Char(10) 
+
+ 
+
++ ' If Trigger_NestLevel() > 1 Return; ' + Char(13) + Char(10) 
+
+ 
+
++ ' If (UPDATE(Created) or UPDATE(LastModified) or UPDATE(LastModifiedBy) or UPDATE(RowVersion)) ' + Char(13) + Char(10) 
+
++ ' AND Trigger_NestLevel() = 1 ' + Char(13) + Char(10) --Check on this later
+
++ ' BEGIN ' + Char(13) + Char(10) 
+
++ ' Raiserror(''Not authorized to update this field.  Update failed.'', 16, 1); ' + Char(13) + Char(10) 
+
++ ' Rollback; ' + Char(13) + Char(10) 
+
++ ' Return;  ' + Char(13) + Char(10) 
+
++ ' END ' + Char(13) + Char(10) 
+
+ 
+
++ ' ' + Char(13) + Char(10) 
+
+ 
+
++ ' UPDATE ' + @TableName  + Char(13) + Char(10) 
+
+ 
+
++ ' SET [LastModified] = getdate(), ' + Char(13) + Char(10) 
+
++ ' [LastModifiedBy] = system_user, ' +  Char(13) + Char(10) 
+
++ ' [RowVersion] = ' + @TableName + '.[RowVersion] + 1 ' + Char(13) + Char(10)
+
+ 
+
++ ' FROM ' + @TableName + ' JOIN INSERTED ON   ' + Char(13) + Char(10) 
+
+--start of building columns clause    TRY INSERTED if DELETED Doesnt work
+
+SELECT @SQL = @SQL +
+
++ '(' + @TableName + '.' + c.name + ' = INSERTED.' + c.name +
+
++ ' OR (' + @TableName + '.' + c.name + ' IS NULL AND INSERTED.' + c.name + ' IS NULL))'
+
+ 
+
++ ' AND ' 
+
+ 
+
+FROM sys.tables AS t
+
+JOIN sys.columns AS c   --could be INNER JOIN
+
+ON t.[object_id] = c.[object_id]  --use braces to distinguish between keyword object_id
+
+WHERE
+
+t.name = @TableName  AND c.name <> 'ts' AND c.name <> 'LastModified' AND c.name <> 'LastModifiedBy'
+
+AND c.name <> 'RowVersion' and c.name <> 'Created'
+
+ 
+
+ 
+
+SET @SQL = @SQL + + '0=0' + Char(13) + Char(10) --Fix this sometime, truncate last AND
+
+ 
+
+ 
+
+ 
+
++ ' ' + Char(13) + Char(10) 
+
+ 
+
++ 'END TRY ' +  Char(13) + Char(10) 
+
+ 
+
++ '  BEGIN CATCH ' +  Char(13) + Char(10) 
+
++ ' RAISERROR(''Not authorized to update this field.  Update failed.'', 16, 1 ) with log ' +  Char(13) + Char(10) 
+
++ '  END CATCH  ' +  Char(13) + Char(10) 
+
++ '  ' +  Char(13) + Char(10) 
+
+ 
+
+ 
+
+ print @sql  --rem this out if you want, displays the sql that builds the audit tables
+
+exec (@SQL)   
+
+print Char(13) + Char(10) 
+
+print Char(13) + Char(10) 
+
+print Char(13) + Char(10) 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+      FETCH cTables INTO @TableName   -- fetch next
+
+  END
+
+-- 4  
+
+CLOSE cTables
+
+-- 5
+
+DEALLOCATE cTables
+
+ 
+
+print '*** END OF Stored Procedure. ***' 
+
+PRINT ' * NOTE: This output can be copied into new query window *'
+
+PRINT ' *       and executed in pieces to aide troubleshooting. *'
+
+EN
