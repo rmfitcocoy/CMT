@@ -1,0 +1,1320 @@
+USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spArea_update]    Script Date: 6/14/2018 6:01:10 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : spArea_update
+   Tables Accessed : tbl_Branch
+           Authors : Aldwin
+      Date Created : June 11, 2018
+	  Date Updated : 
+		 Version # : 1.0.2
+
+Overview: 
+		Update values in tbl_Area 
+
+Revision:
+  Purpose										Date and Time			Author			Reference
+- Initial Creation of the SP					June 11, 2018-10:09am	Aldwin			None
+- Renaming and Refactoring comments and quuery	June 11, 2018-08:00pm	Aldwin			None
+
+Parameters:
+	@AreaID			int					- To Be Updated
+	@AreaName		varchar(50)			- To Be Updated
+	@Description	varchar(50)			- To be Updated
+	@IsActive		int
+	@RegionCode		int					- To Be Updated
+
+Testing:
+	EXEC spUser_get
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spArea_update]
+	@AreaID			int,
+	@AreaName		varchar(50),
+	@Description	varchar(50),
+	@RegionCode		int,
+	@IsActive		int
+AS
+
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			
+
+			UPDATE tbl_Area
+			SET [AreaName]=@AreaName,[Description]=@Description,[RegionCode]=@RegionCode,[IsActive]=@IsActive
+			WHERE [AreaID] = @AreaID;
+					
+			
+
+
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+END
+
+
+
+
+............................
+USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spArea_insert]    Script Date: 6/14/2018 6:01:01 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : spArea_insert
+   Tables Accessed : tbl_Area
+           Authors : Aldwin
+      Date Created : June 11, 2018
+	  Date Updated : 
+		 Version # : 1.0.2
+
+Overview: 
+		Insert values in tbl_Area 
+
+Revision:
+  Purpose										Date and Time			Author			Reference
+- Initial Creation of the SP					June 11, 2018-02:00pm	Aldwin			None
+- Renaming and Refactoring comments and quuery	June 11, 2018-08:00pm	Aldwin			None
+
+Parameters:
+
+	@AreaName		varchar(50)		-	Name of the Area
+	@Description	varchar(50)		-	Information of the Area
+	@RegionCode		varchar(50)		-	Region Number
+	@IsActive		int				-	Status of The Branch		
+
+Testing:
+	EXEC spBranch_insert 1,'Samboan','New Branch',1029,1
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spArea_insert]
+
+	@AreaName	varchar(50),
+	@RegionCode	int,
+	@Description	varchar(50),
+	@IsActive		int
+AS 
+
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			DECLARE		@_UniqueID		INT,
+				
+						@_StatusID		TINYINT  = 1 ;		-- Default as 1 as describe in tbl_Status as 'Active'
+						
+						
+							
+			/*
+			*  Query to get the autoincrement primary ID column without using @@Identity function
+			*
+			* References:
+			* https://dba.stackexchange.com/questions/153066/is-identity-documented-and-reliable-in-sql-server
+			*/
+			SELECT @_UniqueID = Isnull(max(AreaID),0) + 1 FROM [dbo].[tbl_Area];
+
+			IF EXISTS(SELECT TOP 1 [AreaName] FROM [dbo].[tbl_Area] WHERE [AreaName] =  @AreaName)
+				  BEGIN
+					-- Duplicate Branch Name
+					SELECT 'duplicate_area_name'				AS 'return_message'
+				  END 
+
+			ELSE IF EXISTS(SELECT TOP 1 [RegionCode] FROM [dbo].[tbl_Area] WHERE [RegionCode]  =  @RegionCode)
+				 BEGIN
+				  -- Duplicate Area Code
+				   SELECT 'duplicate_region_code'				AS 'return_message'
+				 END
+
+			
+
+			ELSE      --If Validation pass and success
+				 BEGIN
+					-- Insertion for tbl_Branch
+					INSERT INTO [dbo].[tbl_Area]
+						([AreaID], [AreaName],  [RegionCode],[Description],
+						[IsActive])
+					VALUES
+						(@_UniqueID,@AreaName, @RegionCode,@Description,@_StatusID);
+
+
+					SELECT TOP 1
+						@_UniqueID					AS 'AreaID',
+						@AreaName					AS 'AreaName',
+						@RegionCode					AS 'RegionCode',
+						@Description				AS 'Description',
+						
+						@_StatusID					AS 'IsActive',
+						
+						'success'					AS 'return_message'
+					FROM 
+						[dbo].[tbl_Area]
+					WHERE 
+						[dbo].[tbl_Area].[AreaID] = @_UniqueID;		
+				 END		
+				
+
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+END
+
+..........................
+
+
+USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spArea_get]    Script Date: 6/14/2018 6:00:51 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : spArea_get
+   Tables Accessed : dbo.tbl_Area
+           Authors : Aldwin
+      Date Created : June 11, 2018
+	  Date Updated : 
+		 Version # : 1.0.2
+
+Overview:	
+		SELECT ALL DATA IN AREA TABLE
+Revision:
+  Purpose										Date and Time			Author			Reference
+- Initial Creation of the SP					June 11, 2018-02:00pm	Aldwin			None
+- Renaming and Refactoring comments and quuery	June 11, 2018-08:00pm	Aldwin			None
+
+Parameters:
+	@AreaName		varchar(50)		-	The Area that is to be searched
+	@IsActive		int				-	The one who added the accounts
+
+
+Testing:
+	EXEC spArea_get 
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spArea_get]
+	@AreaName		varchar (50) = '',
+	@IsActive			INT = 0
+
+AS 
+
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			
+			
+				IF (@IsActive = 0)
+					BEGIN
+					
+						SELECT 
+						*,
+						'success'					AS 'return_message'
+						
+						FROM 
+						[dbo].[tbl_Area] 
+						
+						
+						WHERE 
+						[AreaName] LIKE '%'+@AreaName+'%'
+					
+					
+					END
+				ELSE
+				BEGIN
+										SELECT 
+						*,
+						'success'					AS 'return_message'
+						
+						FROM 
+						[dbo].[tbl_Area] 
+						
+						
+						WHERE 
+						[AreaName] LIKE '%'+@AreaName+'%'
+						AND
+						[IsActive] = @IsActive;
+			END	
+
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+END
+
+...............................
+
+USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spArea_delete]    Script Date: 6/14/2018 6:00:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : spArea_delete
+   Tables Accessed : tbl_Roles, tbl_Status, tbl_Users
+           Authors : Aldwin
+      Date Created : June 11, 2018
+	  Date Updated : 
+		 Version # : 1.0.2
+
+Overview: 
+		Insert values in tbl_Informations, tbl_Roles, tbl_Status and tbl_Users 
+
+Revision:
+  Purpose										Date and Time			Author			Reference
+- Initial Creation of the SP					June 11, 2018-011:39pm	Aldwin			None
+- Renaming and Refactoring comments and quuery	June 11, 2018-08:00pm	Aldwin			None
+
+Parameters:
+	@AreaID			int			-	T
+
+
+Testing:
+	EXEC spUser_get
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spArea_delete]
+	@AreaID INT
+
+	
+AS 
+
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			DECLARE @_IsActive INT = 0
+
+			UPDATE tbl_Area 
+			SET [IsActive] = @_IsActive 
+			WHERE AreaID = @AreaID;
+					
+			
+
+
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+END
+
+................................
+	USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spUser_update]    Script Date: 6/14/2018 6:03:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : spUser_update
+   Tables Accessed : tbl_Users
+           Authors : Aldwin
+      Date Created : June 08, 2018
+	  Date Updated : 
+		 Version # : 1.0.2
+
+Overview: 
+		Insert values in tbl_Informations, tbl_Roles, tbl_Status and tbl_Users 
+
+Revision:
+  Purpose										Date and Time			Author			Reference
+- Initial Creation of the SP					June 08, 2018-10:09am	Aldwin			None
+- Renaming and Refactoring comments and quuery	June 08, 2018-08:00pm	Aldwin			None
+
+Parameters:
+	@UserID			bigint				- To Be Updated
+	@Password		varchar(50)			- To Be Updated
+	@MiddleName		varchar(50)			- To be Updated
+	@LastName		varchar(50)			- To Be Updated
+	@Role			int					- To be Updated
+Testing:
+	EXEC spUser_get
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spUser_update]
+	@UserID		bigint,
+	@Password	varchar(50),
+	@FirstName	varchar(50),
+	@MiddleName	varchar(50),
+	@LastName	varchar(50),
+	@Role		int
+AS
+
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			
+	
+			UPDATE tbl_Users 
+			SET [Password]=@Password,[FirstName]=@FirstName,[MiddleName]=@MiddleName,[LastName]=@LastName,[Role]=@Role
+			WHERE UserID = @UserID;
+		
+		
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+END
+
+.........................
+USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spUser_login]    Script Date: 6/14/2018 6:03:29 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : sp_UserLogin
+   Tables Accessed : tbl_Informations, tbl_Roles, tbl_Status, tbl_Users
+           Authors : Aldwin
+      Date Created : June 05, 2018
+	  Date Updated : 
+
+
+Overview: 
+		To Login in User Table
+
+Revision:
+  Purpose							Date and Time		By                  Reference
+- Initial Creation of the SP		June 05, 2018		Aldwin				none
+
+
+Parameters:
+	
+	@UserName		varchar(50)		-	Username of the account
+	@Password		varchar(50)		-	Password of the account
+
+Testing:
+	select * from tbl_Users 
+123123
+accounthere
+	EXEC spUser_login 'ffff','ff'
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spUser_login]
+	@UserName		varchar(50),
+	@Password		varchar(50)
+AS 
+
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION			
+
+		
+		
+				IF EXISTS(SELECT [UserID] FROM tbl_Users WHERE UserName = @UserName AND [Password] = @Password 
+				AND [Status] =  1)
+				BEGIN
+					SELECT 
+						[dbo].[tbl_Users].[UserID],
+						[dbo].[tbl_Users].[UserName],
+						[dbo].[tbl_Users].[EmailAddress],
+						[dbo].[tbl_Users].[Password],
+						[dbo].[tbl_Roles].[RoleID],
+						'user_found'								AS 'return_message'
+					FROM 
+						[dbo].[tbl_Users],
+						[dbo].[tbl_Roles]
+					WHERE 
+						[dbo].[tbl_Users].[UserName] = @UserName									AND
+						[dbo].[tbl_Users].[Password] = @Password									AND
+						
+						[dbo].[tbl_Roles].[RoleID] = [dbo].[tbl_Users].[Role]						AND
+						[dbo].[tbl_Roles].[IsActive] = 1											
+				END
+			-- Else Statement if no data found on the query
+			ELSE
+				BEGIN
+					IF EXISTS(SELECT UserID FROM tbl_Users WHERE UserName = @UserName AND [Password] =  @Password  AND [Status] = 0)
+						BEGIN
+							SELECT 'disabled_user'					AS 'return_message'
+						END
+					ELSE IF EXISTS(SELECT [UserID] FROM tbl_Users WHERE UserName = @UserName)
+						BEGIN
+							SELECT 'wrong_password'					AS 'return_message'
+						END
+					
+					ELSE
+						BEGIN
+							SELECT 'user_not_found'					AS 'return_message'
+						END	
+				
+				END
+			
+
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+
+END
+...........................
+USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spUser_insert]    Script Date: 6/14/2018 6:03:22 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : spRegister_ins
+   Tables Accessed : tbl_Informations, tbl_Roles, tbl_Status, tbl_Users
+           Authors : Francisco
+      Date Created : June 05, 2018
+	  Date Updated : 
+		 Version # : 1.0.2
+
+Overview: 
+		Insert values in tbl_Informations, tbl_Roles, tbl_Status and tbl_Users 
+
+Revision:
+  Purpose										Date and Time			Author			Reference
+- Initial Creation of the SP					June 05, 2018-02:00pm	Francisco		None
+- Renaming and Refactoring comments and quuery	June 05, 2018-08:00pm	Francisco		None
+
+Parameters:
+	
+	@UserName		varchar(50)		-	Username of the account
+	@Password		varchar(50)		-	The Encrpyed password of the suer
+	@EmailAddress	varchar(50)		-	Email address of the user
+	@FirstName		varchar(50)		-	Firstname of the 
+	@MiddleName		varchar(50)		-	Firstname of the 
+	@LastName		varchar(50)		-	Firstname of the 
+	@RoleID			int			-	The Role ID
+
+Testing:
+	EXEC spUser_insert 23,'13','sadf','tews123sr.co','fname','mname','lname',1
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spUser_insert]
+	@UserName		varchar(50),
+	@Password		varchar(50),
+	@EmailAddress	varchar(50),
+	@FirstName		varchar(50),
+	@MiddleName		varchar(50),
+	@LastName		varchar(50),
+	@RoleID			INT
+AS 
+
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			DECLARE		@_UniqueID		INT,
+						@_StatusID		TINYINT  = 1 ,		-- Default as 1 as describe in tbl_Status as 'Active'
+						@_EmailAddress		VARCHAR(50),
+						@_Username		VARCHAR(50) ;
+							
+			/*
+			*  Query to get the autoincrement primary ID column without using @@Identity function
+			*
+			* References:
+			* https://dba.stackexchange.com/questions/153066/is-identity-documented-and-reliable-in-sql-server
+			*/
+			SELECT @_UniqueID = Isnull(max(UserID),0) + 1 FROM [dbo].[tbl_Users];
+
+			IF EXISTS(SELECT TOP 1 [UserName] FROM [dbo].[tbl_Users] WHERE [UserName] =  @Username)
+				  BEGIN
+					-- Duplicate Username
+					SELECT 'duplicate_username'				AS 'return_message'
+				  END 
+
+			ELSE IF EXISTS(SELECT TOP 1 [EmailAddress] FROM [dbo].[tbl_Users] WHERE [EmailAddress]  =  @EmailAddress)
+				 BEGIN
+				  -- Duplicate Email Address
+				   SELECT 'duplicate_email_address'				AS 'return_message'
+				 END
+
+			
+
+			ELSE      --If Validation pass and success
+				 BEGIN
+					-- Insertion for tbl_Users
+					INSERT INTO [dbo].[tbl_Users]
+						([UserID], [UserName], [Password], [EmailAddress], [FirstName], [MiddleName],[LastName],
+						 [Role], [Status])
+					VALUES
+						(@_UniqueID,@UserName,@Password, @EmailAddress,@FirstName,@MiddleName,@LastName,
+							@RoleID,@_StatusID);
+
+
+					SELECT TOP 1
+						@_UniqueID					AS 'UserID',
+						@UserName					AS 'UserName',
+						@Password					AS 'Password',
+						@EmailAddress				AS 'EmailAddress',
+						@FirstName					AS 'FirstName',
+						@MiddleName					AS 'MiddleName',
+						@LastName					AS 'LastName',
+						[RoleName]					AS 'RoleName',
+						'success'					AS 'return_message'
+					FROM 
+						[dbo].[tbl_Users],
+						[dbo].[tbl_Roles], [dbo].[tbl_Status]
+					WHERE 
+						[dbo].[tbl_Users].[UserID] = @_UniqueID					AND	
+						[dbo].[tbl_Roles].[RoleID] = @RoleID		
+				 END		
+				
+
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+END
+
+..........................
+
+USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spUser_get]    Script Date: 6/14/2018 6:03:15 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : spRegister_ins
+   Tables Accessed : tbl_Informations, tbl_Roles, tbl_Status, tbl_Users
+           Authors : Francisco
+      Date Created : June 05, 2018
+	  Date Updated : 
+		 Version # : 1.0.2
+
+Overview: 
+		Insert values in tbl_Informations, tbl_Roles, tbl_Status and tbl_Users 
+
+Revision:
+  Purpose										Date and Time			Author			Reference
+- Initial Creation of the SP					June 05, 2018-02:00pm	Francisco		None
+- Renaming and Refactoring comments and quuery	June 05, 2018-08:00pm	Francisco		None
+
+Parameters:
+	@StatusCode	int				-	Status of the User
+	@UserID		BIG				-	The one who added the accounts
+
+
+Testing:
+	EXEC spUser_get 1 , 2
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spUser_get]
+	@StatusCode			INT = NULL,
+	@UserID				BIGINT=0
+
+AS 
+
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+				
+				IF  (@UserID = 0 )
+					BEGIN
+					SELECT 
+						*,
+						'success'					AS 'return_message'
+					FROM 
+						[dbo].[tbl_Users] 
+					END
+				ELSE
+					BEGIN
+					SELECT * FROM tbl_Users where UserID = @UserID
+					END 
+					
+			
+
+
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+END
+
+.......................
+USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spUser_delete]    Script Date: 6/14/2018 6:03:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : spUser_delete
+   Tables Accessed : tbl_Roles, tbl_Status, tbl_Users
+           Authors : Aldwin
+      Date Created : June 07, 2018
+	  Date Updated : 
+		 Version # : 1.0.2
+
+Overview: 
+		Insert values in tbl_Informations, tbl_Roles, tbl_Status and tbl_Users 
+
+Revision:
+  Purpose										Date and Time			Author			Reference
+- Initial Creation of the SP					June 07, 2018-011:39pm	Aldwin			None
+- Renaming and Refactoring comments and quuery	June 07, 2018-08:00pm	Aldwin			None
+
+Parameters:
+	@UserID			BIG				-	The one whose account is gonna close.
+
+Testing:
+	EXEC spUser_get
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spUser_delete]
+	@UserID BIGINT
+	
+AS 
+
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			DECLARE @_Status INT = 0
+			
+			UPDATE tbl_Users 
+			SET [Status] = @_Status 
+			WHERE UserID = @UserID;
+		
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+END
+
+.............................
+USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spRegion_update]    Script Date: 6/14/2018 6:03:00 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : spRegion_update
+   Tables Accessed : tbl_Region
+           Authors : Aldwin
+      Date Created : June 14, 2018
+	  Date Updated : 
+		 Version # : 1.0.2
+
+Overview: 
+		Update values in tbl_Area 
+
+Revision:
+  Purpose										Date and Time			Author			Reference
+- Initial Creation of the SP					June 14, 2018-9:31am	Aldwin			None
+- Renaming and Refactoring comments and quuery	June 14, 2018-08:00pm	Aldwin			None
+
+Parameters:
+	@AreaID			int					- To Be Updated
+	@AreaName		varchar(50)			- To Be Updated
+	@Description	varchar(50)			- To be Updated
+	@RegionCode		int					- To Be Updated
+
+Testing:
+	EXEC spUser_get
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spRegion_update]
+	@RegionID		int,
+	@RegionName		varchar(50),
+	@Description	varchar(50),
+	@IsActive		int
+AS
+
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			
+
+			UPDATE tbl_Region
+			SET [RegionName]=@RegionName,[Description]=@Description,[IsActive]=@IsActive
+			WHERE [RegionID] = @RegionID;
+					
+			
+
+
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+END
+
+.......................
+
+USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spRegion_insert]    Script Date: 6/14/2018 6:02:50 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : spArea_insert
+   Tables Accessed : tbl_Region
+           Authors : Aldwin
+      Date Created : June 14, 2018
+	  Date Updated : 
+		 Version # : 1.0.2
+
+Overview: 
+		Insert values in tbl_Area 
+
+Revision:
+  Purpose										Date and Time			Author			Reference
+- Initial Creation of the SP					June 14, 2018-09:14am	Aldwin			None
+- Renaming and Refactoring comments and quuery	June 14, 2018-08:00pm	Aldwin			None
+
+Parameters:
+
+	@RegionName		varchar(50)		-	Name of the Area
+	@Description	varchar(50)		-	Information of the Area
+	@IsActive		int				-	Status of The Branch		
+
+Testing:
+	EXEC spBranch_insert 1,'Samboan','New Branch',1029,1
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spRegion_insert]
+
+	@RegionName		varchar(50),
+	@Description	varchar(50),
+	@IsActive		int
+AS 
+
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			DECLARE		@_UniqueID		INT,
+				
+						@_StatusID		INT  = 1 ;		-- Default as 1 as describe in tbl_Status as 'Active'
+						
+						
+							
+			/*
+			*  Query to get the autoincrement primary ID column without using @@Identity function
+			*
+			* References:
+			* https://dba.stackexchange.com/questions/153066/is-identity-documented-and-reliable-in-sql-server
+			*/
+			SELECT @_UniqueID = Isnull(max(RegionID),0) + 1 FROM [dbo].[tbl_Region];
+
+			IF EXISTS(SELECT TOP 1 [RegionName] FROM [dbo].[tbl_Region] WHERE [RegionName] =  @RegionName)
+				  BEGIN
+					-- Duplicate Branch Name
+					SELECT 'duplicate_area_name'				AS 'return_message'
+				  END 
+			
+
+			ELSE      --If Validation pass and success
+				 BEGIN
+					-- Insertion for tbl_Region
+					INSERT INTO [dbo].[tbl_Region]
+						([RegionID], [RegionName], [Description],
+						[IsActive])
+					VALUES
+						(@_UniqueID,@RegionName,@Description,@_StatusID);
+
+
+					SELECT TOP 1
+						@_UniqueID					AS 'RegionID',
+						@RegionName					AS 'RegionName',
+						@Description				AS 'Description',
+						@_StatusID					AS 'IsActive',
+						
+						'success'					AS 'return_message'
+					FROM 
+						[dbo].[tbl_Region]
+					WHERE 
+						[dbo].[tbl_Region].[RegionID] = @_UniqueID;		
+				 END		
+				
+
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+END
+
+......................
+USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spRegion_get]    Script Date: 6/14/2018 6:02:43 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : spRegion_get
+   Tables Accessed : dbo.tbl_Region
+           Authors : Aldwin
+      Date Created : June 14, 2018
+	  Date Updated : 
+		 Version # : 1.0.2
+
+Overview:	
+		SELECT ALL DATA IN AREA TABLE
+Revision:
+  Purpose										Date and Time			Author			Reference
+- Initial Creation of the SP					June 14, 2018-09:26am	Aldwin			None
+- Renaming and Refactoring comments and quuery	June 14, 2018-08:00pm	Aldwin			None
+
+Parameters:
+	@RegionName		varchar(50)		-	The Region that is to be searched
+	@IsActive		int				-	The one who added the accounts
+
+
+Testing:
+	EXEC spRegion_get 
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spRegion_get]
+	@RegionName		varchar (50) = '',
+	@IsActive			INT = 0
+
+AS 
+
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			
+			
+				IF (@IsActive = 0)
+					BEGIN
+					
+						SELECT 
+						*,
+						'success'					AS 'return_message'
+						
+						FROM 
+						[dbo].[tbl_Region] 
+						
+						
+						WHERE 
+						[RegionName] LIKE '%'+@RegionName+'%'
+					
+					
+					END
+				ELSE
+				BEGIN
+										SELECT 
+						*,
+						'success'					AS 'return_message'
+						
+						FROM 
+						[dbo].[tbl_Region] 
+						
+						
+						WHERE 
+						[RegionName] LIKE '%'+@RegionName+'%'
+						AND
+						[IsActive] = @IsActive;
+			END	
+
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+END
+
+
+--------------------
+USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spRegion_delete]    Script Date: 6/14/2018 6:02:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : spArea_delete
+   Tables Accessed :tbl_Region
+           Authors : Aldwin
+      Date Created : June 14, 2018
+	  Date Updated : 
+		 Version # : 1.0.2
+
+Overview: 
+		Insert values in tbl_Region 
+
+Revision:
+  Purpose										Date and Time			Author			Reference
+- Initial Creation of the SP					June 14, 2018-09:23am	Aldwin			None
+- Renaming and Refactoring comments and quuery	June 14, 2018-08:00pm	Aldwin			None
+
+Parameters:
+	@RegionID			int			-	T
+
+
+Testing:
+	EXEC spUser_get
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spRegion_delete]
+	@RegionID INT
+
+	
+AS 
+
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			DECLARE @_IsActive INT = 0
+
+			UPDATE tbl_Region 
+			SET [IsActive] = @_IsActive 
+			WHERE [RegionID] = @RegionID;
+					
+			
+
+
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+END
+
+.........................
+USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spBranch_update]    Script Date: 6/14/2018 6:02:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : spBranch_update
+   Tables Accessed : tbl_Branch
+           Authors : Aldwin
+      Date Created : June 11, 2018
+	  Date Updated : 
+		 Version # : 1.0.2
+
+Overview: 
+		Update values in tbl_Branch 
+
+Revision:
+  Purpose										Date and Time			Author			Reference
+- Initial Creation of the SP					June 11, 2018-10:09am	Aldwin			None
+- Renaming and Refactoring comments and quuery	June 11, 2018-08:00pm	Aldwin			None
+
+Parameters:
+	@BranchID		int					- To Be Updated
+	@BranchName		varchar(50)			- To Be Updated
+	@Description	varchar(50)			- To be Updated
+	@IsActive		int
+	@AreaCode		int					- To Be Updated
+
+Testing:
+	EXEC spUser_get
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spBranch_update]
+	@BranchID		int,
+	@BranchName		varchar(50),
+	@Description	varchar(50),
+	@AreaCode		int,
+	@IsActive		int
+	
+AS
+
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			
+
+			UPDATE tbl_Branch 
+			SET [BranchName]=@BranchName,[Description]=@Description,[AreaCode]=@AreaCode,[IsActive]=@IsActive
+			WHERE BranchID = @BranchID;
+					
+			
+
+
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+END
+
+...................
+USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spBranch_insert]    Script Date: 6/14/2018 6:02:15 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : spBranch_insert
+   Tables Accessed : tbl_Branch
+           Authors : Aldwin
+      Date Created : June 11, 2018
+	  Date Updated : 
+		 Version # : 1.0.2
+
+Overview: 
+		Insert values in tbl_Informations, tbl_Roles, tbl_Status and tbl_Users 
+
+Revision:
+  Purpose										Date and Time			Author			Reference
+- Initial Creation of the SP					June 05, 2018-02:00pm	Francisco		None
+- Renaming and Refactoring comments and quuery	June 05, 2018-08:00pm	Francisco		None
+
+Parameters:
+	
+	@BranchName		varchar(50)		-	Name of the Branch
+	@Description	varchar(50)		-	Information of the Branch
+	@AreaCode		varchar(50)		-	ID of the Area
+	
+
+Testing:
+	EXEC spBranch_insert Sibulan,Kamote,
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spBranch_insert]
+	
+	@BranchName	varchar(50),
+	@Description	varchar(50),
+	@AreaCode	int
+AS 
+
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			DECLARE		@_UniqueID		INT,
+						@_StatusID		TINYINT  = 1 ;		-- Default as 1 as describe in tbl_Status as 'Active'
+						
+						
+							
+			/*
+			*  Query to get the autoincrement primary ID column without using @@Identity function
+			*
+			* References:
+			* https://dba.stackexchange.com/questions/153066/is-identity-documented-and-reliable-in-sql-server
+			*/
+			SELECT @_UniqueID = Isnull(max(BranchID),0) + 1 FROM [dbo].[tbl_Branch];
+
+			IF EXISTS(SELECT TOP 1 [BranchName] FROM [dbo].[tbl_Branch] WHERE [BranchName] =  @BranchName)
+				  BEGIN
+					-- Duplicate Branch Name
+					SELECT 'duplicate_branch_name'				AS 'return_message'
+				  END 
+
+			ELSE IF EXISTS(SELECT TOP 1 [AreaCode] FROM [dbo].[tbl_Branch] WHERE [AreaCode]  =  @AreaCode)
+				 BEGIN
+				  -- Duplicate Area Code
+				   SELECT 'duplicate_area_code'				AS 'return_message'
+				 END
+
+			
+
+			ELSE      --If Validation pass and success
+				 BEGIN
+					-- Insertion for tbl_Branch
+					INSERT INTO [dbo].[tbl_Branch]
+						([BranchID], [BranchName], [Description], [AreaCode],
+						[IsActive])
+					VALUES
+						(@_UniqueID,@BranchName,@Description, @AreaCode,@_StatusID);
+
+
+					SELECT TOP 1
+						@_UniqueID					AS 'BranchID',
+						@BranchName					AS 'BranchName',
+						@Description				AS 'Description',
+						@AreaCode					AS 'AreaCode',
+					
+						@_StatusID					AS 'IsActive',
+						
+						'success'					AS 'return_message'
+					FROM 
+						[dbo].[tbl_Branch]
+					WHERE 
+						[dbo].[tbl_Branch].[BranchID] = @_UniqueID;		
+				 END		
+				
+
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+END
+
+.................
+USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spBranch_get]    Script Date: 6/14/2018 6:02:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : spBranch_get
+   Tables Accessed : tbl_Branch
+           Authors : Aldwin
+      Date Created : June 11, 2018
+	  Date Updated : 
+		 Version # : 1.0.2
+
+Overview: 
+		Insert values in tbl_Informations, tbl_Roles, tbl_Status and tbl_Users 
+
+Revision:
+  Purpose										Date and Time			Author			Reference
+- Initial Creation of the SP					June 11, 2018-02:00pm	Aldwin			None
+- Renaming and Refactoring comments and quuery	June 11, 2018-08:00pm	Aldwin			None
+
+Parameters:
+	@BranchName			varchar(50)			- To Search the Branch Name of the branch
+	@IsActive			int					- To Determine the status of the Branch 
+
+Testing:
+	EXEC spBranch_get 'Palawan'
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spBranch_get]
+@BranchName varchar(50) = '',
+@IsActive INT = 0
+
+
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION		
+			
+				IF (@IsActive = 0)
+					BEGIN
+					
+						SELECT 
+						*,
+						'success'					AS 'return_message'
+						
+						FROM 
+						[dbo].[tbl_Branch] 
+						
+						
+						WHERE 
+						[BranchName] LIKE '%'+@BranchName+'%'
+					
+					
+					END
+				ELSE
+										SELECT 
+						*,
+						'success'					AS 'return_message'
+						
+						FROM 
+						[dbo].[tbl_Branch] 
+						
+						
+						WHERE 
+						[BranchName] LIKE '%'+@BranchName+'%'
+						AND
+						[IsActive] = @IsActive;
+			
+
+
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+END
+
+.....................
+USE [database_Framework]
+GO
+/****** Object:  StoredProcedure [dbo].[spBranch_delete]    Script Date: 6/14/2018 6:01:56 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*****************************************************************************************
+Stored Producedure : spBranch_delete
+   Tables Accessed : tbl_Roles, tbl_Status, tbl_Users
+           Authors : Aldwin
+      Date Created : June 11, 2018
+	  Date Updated : 
+		 Version # : 1.0.2
+
+Overview: 
+		Insert values in tbl_Informations, tbl_Roles, tbl_Status and tbl_Users 
+
+Revision:
+  Purpose										Date and Time			Author			Reference
+- Initial Creation of the SP					June 11, 2018-011:39pm	Aldwin			None
+- Renaming and Refactoring comments and quuery	June 11, 2018-08:00pm	Aldwin			None
+
+Parameters:
+	@BranchID		BIG				-	The one whose account is gonna close.
+	
+
+Testing:
+	EXEC spUser_get
+*****************************************************************************************/
+ALTER PROCEDURE [dbo].[spBranch_delete]
+	@BranchID int
+
+	
+AS 
+
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			DECLARE @_IsActive INT = 0
+
+			UPDATE tbl_Branch 
+			SET [IsActive] = @_IsActive
+			WHERE BranchID = @BranchID;
+					
+			
+
+
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SELECT ERROR_MESSAGE() AS 'return_message'
+	END CATCH
+END
