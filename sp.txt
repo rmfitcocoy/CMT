@@ -10,7 +10,7 @@ Stored Producedure : spArea_update
    Tables Accessed : tbl_Branch
            Authors : Aldwin
       Date Created : June 11, 2018
-	  Date Updated : 
+	  Date Updated : s
 		 Version # : 1.0.2
 
 Overview: 
