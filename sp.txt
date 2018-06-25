@@ -1,4 +1,4 @@
-USE [database_Framework]
+USE [database_IOT]
 GO
 /****** Object:  StoredProcedure [dbo].[spArea_update]    Script Date: 6/14/2018 6:01:10 PM ******/
 SET ANSI_NULLS ON
