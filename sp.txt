@@ -1,4 +1,3 @@
-/* edited */
 USE [database_Framework] atika
 GO
 /****** Object:  StoredProcedure [dbo].[spArea_update]    Script Date: 6/14/2018 6:01:10 PM ******/
